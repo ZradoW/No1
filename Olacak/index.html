@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝙅𝙍|Fahrenight¹⁹³³☪</title> 
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="icon" type="image/png" href="mor_silah.png"> 
+</head>
+<body>
+    
+    <div id="preloader">
+        <div class="enter-text">Click to enter...</div>
+    </div>
+
+    <video autoplay loop muted playsinline id="video-background">
+        <source src="arka_plan_video.mp4" type="video/mp4">
+        Tarayıcınız video etiketini desteklemiyor.
+    </video>
+
+    <button id="mute-toggle" class="mute-button">
+        <i class="fas fa-volume-off"></i> 
+    </button>
+
+    <div class="container">
+        <div class="profile-card">
+
+            <div class="profile-views">
+                <i class="fa-regular fa-eye"></i> 
+                <span>469</span>
+            </div>
+            
+            <img src="avatar.jpg" alt="Profil Resmi" class="main-avatar">
+            
+            <h1>𝙅𝙍|Fahrenight¹⁹³³☪</h1>
+            
+            <p class="location">
+                <i class="fa-solid fa-location-dot"></i> Germany 
+                <span class="mini-location-badge">ᴅᴇᴜ</span>
+            </p>
+
+            <div class="link-info">
+                
+                <div class="mini-profile">
+                    <img src="mini-avatar.jpg" alt="Mini Profil" class="mini-avatar">
+                    <span class="discord-username">tr_aytekin</span> 
+                </div>
+
+                <div class="badges-row">
+                    <span class="badge badge-vip">⚡ VIP</span>
+                    
+                    <span class="badge badge-other purple-badge" title="Guard Rozet"><i class="fa-solid fa-shield-halved"></i></span>
+                </div>
+                
+            </div>
+
+            <div class="social-links">
+                <a href="javascript:void(0)" onclick="copyDiscord('tr_aytekin')" title="Discord">
+                    <i class="fab fa-discord"></i>
+                    <span>Discord</span>
+                </a>
+                <a href="https://steamcommunity.com/profiles/76561199172430315/" target="_blank" title="Steam">
+                    <i class="fab fa-steam"></i>
+                    <span>Steam</span>
+                </a>
+                <a href="https://github.com/ZradoW" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+            </div>
+
+            <p class="tag">MA</p>
+
+        </div>
+    </div>
+    
+    <script>
+        const video = document.getElementById('video-background');
+        const muteToggle = document.getElementById('mute-toggle');
+
+        // Ses Düğmesi
+        muteToggle.addEventListener('click', () => {
+            video.muted = !video.muted;
+            muteToggle.innerHTML = video.muted ? '<i class="fas fa-volume-off"></i>' : '<i class="fas fa-volume-up"></i>'; 
+        });
+
+        // Preloader
+        const preloader = document.getElementById('preloader');
+
+        preloader.addEventListener('click', () => {
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500); 
+        });
+
+        window.onload = function() {
+            preloader.style.opacity = '1';
+        };
+
+        // Discord Kullanıcı Adı Kopyalama
+        function copyDiscord(username) {
+            navigator.clipboard.writeText(username).then(() => {
+                alert(`Discord kullanıcı adı kopyalandı: ${username}`);
+            }).catch(err => {
+                console.error('Kopyalama hatası: ', err);
+            });
+        }
+        // Mini profildeki kullanıcı adına tıklayınca da kopyalamayı tetikleyelim.
+        document.querySelector('.discord-username').addEventListener('click', () => {
+            copyDiscord('tr_aytekin');
+        });
+    </script>
+</body>
+</html>
