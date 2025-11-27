@@ -1,0 +1,285 @@
+/*
+==============================
+GENEL STİLLER VE SIFIRLAMA
+==============================
+*/
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #36393F; 
+    color: #e3e3e3; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;     
+    min-height: 100vh;       
+    overflow: hidden;        
+    
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><path d='M22 0h4v48h-4zM0 22h48v4h-4z' fill='#00FFFF' style='filter:drop-shadow(0 0 5px #00FFFF) drop-shadow(0 0 10px rgba(0,255,255,0.7));'/></svg>") 24 24, auto;
+}
+
+/* ... ARKA PLAN VE PRELOADER KISMI AYNI ... */
+#preloader {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; z-index: 9999; display: flex; justify-content: center; align-items: center; 
+    opacity: 0; 
+    transition: opacity 0.5s ease-out;
+    cursor: pointer; 
+}
+.enter-text {
+    font-size: 2em; color: white; 
+    text-shadow: 0 0 5px #00FFFF, 0 0 10px #00FFFF, 0 0 20px rgba(0, 255, 255, 0.7);
+    cursor: pointer;
+}
+#video-background {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; 
+    filter: brightness(0.7) blur(1px); 
+}
+.mute-button {
+    position: fixed; top: 20px; right: 20px; z-index: 100; 
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #00FFFF; 
+    color: #00FFFF;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    box-shadow: 0 0 5px #00FFFF; 
+    transition: all 0.2s;
+}
+.mute-button:hover {
+    background: #00FFFF;
+    color: #000;
+    box-shadow: 0 0 10px #00FFFF; 
+}
+
+/*
+==============================
+PROFİL KART STİLİ VE GÖRÜNTÜLENME SAYISI
+==============================
+*/
+.container {
+    width: 100%; max-width: 400px; 
+    position: relative; 
+    z-index: 10; display: flex; justify-content: center; align-items: center; box-sizing: border-box; 
+}
+.profile-card {
+    background: rgba(0, 0, 0, 0.7); 
+    backdrop-filter: blur(10px); 
+    border-radius: 20px;
+    padding: 30px 20px; 
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%; 
+    box-sizing: border-box; 
+    position: relative; 
+}
+
+/* GÖRÜNTÜLENME SAYISI - Şeffaf Siyah ve Köşeye Yapışık */
+.profile-views {
+    position: absolute;
+    bottom: 0px; 
+    left: 0px; 
+    
+    border-bottom-left-radius: 20px; 
+    border-top-right-radius: 0; 
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 7px; 
+
+    /* DÜZELTİLMİŞ ŞEFFAF SİYAH ARKA PLAN */
+    background: rgba(0, 0, 0, 0.5); 
+    padding: 8px 15px; 
+    color: #f0f0f0; 
+    font-size: 1em; 
+    font-weight: 500;
+    box-shadow: none;
+}
+
+/* Ana Avatar */
+.main-avatar {
+    width: 100px; height: 100px; border-radius: 50%; object-fit: cover; 
+    border: 3px solid #00FFFF; 
+    box-shadow: 0 0 15px #00FFFF, 0 0 25px rgba(0, 255, 255, 0.6); 
+    margin-bottom: 10px;
+}
+
+/* Başlık */
+h1 {
+    font-size: 1.8em; margin-bottom: 5px; color: #fff; 
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.7), 0 0 15px rgba(0, 255, 255, 0.4); 
+}
+
+/* Konum (Germany) */
+.location {
+    color: #b0b0b0;
+    font-size: 0.9em;
+    margin-bottom: 25px;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+/* Konum İkonu (Beyaz Neon) */
+.location .fa-location-dot {
+    color: #FFFFFF; 
+    font-size: 1.2em; 
+    margin-right: 8px; 
+    text-shadow: 0 0 5px #FFFFFF, 0 0 10px #FFFFFF, 0 0 20px rgba(255, 255, 255, 0.7); 
+}
+
+/* Germany yanındaki mini DEU rozeti */
+.mini-location-badge {
+    background-color: #5865F2; 
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-left: 8px; 
+    box-shadow: 0 0 5px rgba(88, 101, 242, 0.7); 
+}
+
+
+/*
+==============================
+MOR ROZET KUTUSU (link-info) - ŞEFFAF MOR
+==============================
+*/
+.link-info {
+    position: relative; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    
+    /* Şeffaf Mor Arka Plan */
+    background-color: rgba(75, 0, 130, 0.6); 
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.7); 
+    
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-bottom: 30px; 
+    overflow-x: auto;
+    flex-wrap: nowrap; 
+}
+
+/* Mini Profil (Avatar ve Kullanıcı Adı) */
+.mini-profile {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; 
+    margin-right: 15px; 
+}
+
+.mini-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid #00FFFF; 
+    box-shadow: 0 0 8px #00FFFF; 
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.mini-profile span {
+    font-size: 1em; color: #fff;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5); 
+    white-space: nowrap; 
+    cursor: pointer; /* Tıklanabilir olduğunu belirtir */
+}
+
+/* Rozetler Kapsayıcısı */
+.badges-row {
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+    flex-shrink: 0;
+}
+
+/* Tüm Rozetlerin Ortak Stili */
+.badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    padding: 0 8px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.85em;
+    cursor: default;
+    transition: transform 0.1s;
+    white-space: nowrap; 
+    color: white; 
+}
+.badge:hover {
+    transform: scale(1.05);
+}
+
+/* VIP ROZETİ - ŞEFFAF ARKA PLAN */
+.badge-vip {
+    background-color: rgba(255, 215, 0, 0.7); 
+    color: #333; 
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.7); 
+    font-size: 1em;
+}
+
+/* Mor Kalkan Rozeti - ŞEFFAF ARKA PLAN */
+.badge-other {
+    width: 30px; 
+    height: 30px;
+    padding: 0;
+    border-radius: 5px; 
+    font-size: 1em;
+}
+.purple-badge { 
+    background-color: rgba(138, 43, 226, 0.7); 
+    color: white; 
+    box-shadow: 0 0 5px rgba(138, 43, 226, 0.7); 
+}
+
+/*
+==============================
+SOSYAL MEDYA
+==============================
+*/
+.social-links {
+    margin-top: 20px;
+    display: flex; 
+    justify-content: space-around; 
+    gap: 10px; 
+}
+
+.social-links a {
+    color: #e3e3e3;
+    font-size: 2.5em;
+    text-decoration: none; 
+    transition: color 0.3s, text-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* İkonların altındaki yazıların stili */
+.social-links a span {
+    font-size: 0.35em; 
+    margin-top: 5px;
+    color: #b0b0b0;
+    text-shadow: none;
+}
+
+.social-links a:hover {
+    color: #00FFFF; 
+    text-shadow: 0 0 10px #00FFFF, 0 0 20px rgba(0, 255, 255, 0.5); 
+}
+
+/* Alt Etiket */
+.tag {
+    font-size: 0.8em;
+    color: #b0b0b0;
+    margin-top: 15px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 2px rgba(0, 255, 255, 0.2);
+}
