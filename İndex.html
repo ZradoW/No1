@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝙅𝙍|Fahrenight¹⁹³³☪</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="mor_silah.png">
+    <style>
+        :root {
+            --neon-cyan: #00f0ff;
+            --neon-purple: #b829dd;
+            --neon-pink: #ff2d95;
+            --dark-bg: #050508;
+            --card-bg: rgba(18, 18, 28, 0.65);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: #e3e3e3;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Video Background */
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+            filter: brightness(0.35) contrast(1.1) saturate(1.1);
+        }
+
+        /* Particle Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Scanlines */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.15) 2px,
+                rgba(0,0,0,0.15) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.25;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .preloader-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            color: #fff;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            animation: preloader-pulse 2s ease infinite;
+        }
+
+        @keyframes preloader-pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; text-shadow: 0 0 20px var(--neon-cyan); }
+        }
+
+        /* Mute Button */
+        #mute-toggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 100;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #mute-toggle:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            perspective: 1000px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 28px;
+            padding: 45px 30px 35px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 
+                0 25px 80px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255,255,255,0.02),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out;
+        }
+
+        /* Shimmer Effect */
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 40%,
+                rgba(255,255,255,0.03) 50%,
+                transparent 60%
+            );
+            transform: translateX(-100%);
+            animation: shimmer 8s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            20% { transform: translateX(100%) translateY(100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        /* Subtle gradient glow behind card */
+        .profile-card::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, rgba(0,240,255,0.15), transparent 40%, transparent 60%, rgba(184,41,221,0.15));
+            border-radius: 29px;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Views Badge */
+        .views-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 6px 14px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .views-badge:hover {
+            background: rgba(0,0,0,0.6);
+            border-color: rgba(0,240,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00ff88;
+            animation: live-pulse 2s ease infinite;
+            position: relative;
+        }
+
+        .live-dot::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,255,136,0.4);
+            animation: live-ring 2s ease infinite;
+        }
+
+        @keyframes live-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.85); }
+        }
+
+        @keyframes live-ring {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .views-badge i {
+            font-size: 0.9em;
+            color: var(--neon-cyan);
+        }
+
+        /* Avatar */
+        .avatar-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
+        }
+
+        .main-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.15);
+            box-shadow: 0 0 30px rgba(0,240,255,0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-card:hover .main-avatar {
+            border-color: rgba(0,240,255,0.5);
+            box-shadow: 0 0 40px rgba(0,240,255,0.25), 0 0 80px rgba(184,41,221,0.1);
+            transform: scale(1.03);
+        }
+
+        /* Online Status Dot */
+        .status-dot {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 18px;
+            height: 18px;
+            background: #00ff88;
+            border-radius: 50%;
+            border: 3px solid rgba(18,18,28,0.9);
+            z-index: 3;
+            box-shadow: 0 0 10px rgba(0,255,136,0.5);
+        }
+
+        /* Name */
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 50%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Location */
+        .location {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.95em;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .location .fa-location-dot {
+            color: #ff4757;
+            font-size: 1em;
+            filter: drop-shadow(0 0 5px rgba(255,71,87,0.5));
+        }
+
+        .mini-location-badge {
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.7em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 4px;
+            box-shadow: 0 4px 15px rgba(255,71,87,0.3);
+        }
+
+        /* Link Info Box */
+        .link-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(88, 101, 242, 0.15), rgba(138, 43, 226, 0.1));
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .link-info:hover {
+            border-color: rgba(138, 43, 226, 0.4);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .link-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            transition: left 0.6s;
+        }
+
+        .link-info:hover::before {
+            left: 100%;
+        }
+
+        /* Mini Profile */
+        .mini-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .mini-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,240,255,0.3);
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .mini-profile:hover .mini-avatar {
+            border-color: var(--neon-cyan);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0,240,255,0.3);
+        }
+
+        .discord-username {
+            font-size: 0.95em;
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+
+        .discord-username:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0,240,255,0.4);
+        }
+
+        /* Badges */
+        .badges-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            padding: 0 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8em;
+            cursor: default;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .badge-vip {
+            background: linear-gradient(135deg, rgba(255,215,0,0.9), rgba(255,165,0,0.9));
+            color: #1a1a1a;
+            border-color: rgba(255,215,0,0.3);
+            box-shadow: 0 4px 15px rgba(255,215,0,0.2);
+        }
+
+        .badge-vip:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,215,0,0.35);
+        }
+
+        .purple-badge {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            background: linear-gradient(135deg, rgba(138,43,226,0.8), rgba(75,0,130,0.8));
+            border-color: rgba(138,43,226,0.3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(138,43,226,0.2);
+        }
+
+        .purple-badge:hover {
+            transform: translateY(-2px) rotate(5deg) scale(1.1);
+            box-shadow: 0 8px 25px rgba(138,43,226,0.35);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+
+        .social-links a {
+            position: relative;
+            width: 65px;
+            height: 65px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 18px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 1.4em;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .social-links a span {
+            font-size: 0.6em;
+            margin-top: 5px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.08);
+            border-color: currentColor;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .social-links a[title="Discord"]:hover {
+            color: #5865F2;
+            box-shadow: 0 10px 30px rgba(88,101,242,0.25), 0 0 0 1px rgba(88,101,242,0.2);
+        }
+
+        .social-links a[title="Steam"]:hover {
+            color: #66c0f4;
+            box-shadow: 0 10px 30px rgba(102,192,244,0.25), 0 0 0 1px rgba(102,192,244,0.2);
+        }
+
+        .social-links a[title="GitHub"]:hover {
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.15), 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        .social-links a[title="Centre"]:hover {
+            color: #00ff88;
+            box-shadow: 0 10px 30px rgba(0,255,136,0.25), 0 0 0 1px rgba(0,255,136,0.2);
+        }
+
+        /* Tag */
+        .tag {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.15);
+            margin-top: 20px;
+            letter-spacing: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(10,10,15,0.95);
+            border: 1px solid rgba(0,240,255,0.3);
+            color: var(--neon-cyan);
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-size: 0.9em;
+            font-weight: 500;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,240,255,0.1);
+            z-index: 10001;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(20px);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast i {
+            font-size: 1.1em;
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .reveal-1 { animation-delay: 0.1s; }
+        .reveal-2 { animation-delay: 0.2s; }
+        .reveal-3 { animation-delay: 0.3s; }
+        .reveal-4 { animation-delay: 0.4s; }
+        .reveal-5 { animation-delay: 0.5s; }
+        .reveal-6 { animation-delay: 0.6s; }
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            .profile-card {
+                padding: 35px 20px 30px;
+            }
+            h1 {
+                font-size: 1.3em;
+            }
+            .social-links a {
+                width: 58px;
+                height: 58px;
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+
+    <div id="preloader">
+        <div class="preloader-text">Click To Enter</div>
+    </div>
+
+    <video autoplay loop muted playsinline id="video-background">
+        <source src="arka_plan_video.mp4" type="video/mp4">
+        Tarayıcınız video etiketini desteklemiyor.
+    </video>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <button id="mute-toggle" title="Sesi Aç/Kapat">
+        <i class="fas fa-volume-off"></i>
+    </button>
+
+    <div class="container">
+        <div class="profile-card" id="profile-card">
+
+            <div class="views-badge reveal reveal-1">
+                <div class="live-dot"></div>
+                <i class="fa-regular fa-eye"></i>
+                <span id="view-counter">0</span>
+            </div>
+
+            <div class="avatar-wrapper reveal reveal-2">
+                <img src="avatar.jpg" alt="Profil Resmi" class="main-avatar">
+                <div class="status-dot"></div>
+            </div>
+
+            <h1 class="reveal reveal-3">𝙅𝙍|Fahrenight¹⁹³³☪</h1>
+
+            <p class="location reveal reveal-4">
+                <i class="fa-solid fa-location-dot"></i>
+                Germany
+                <span class="mini-location-badge">DEU</span>
+            </p>
+
+            <div class="link-info reveal reveal-5">
+                <div class="mini-profile">
+                    <img src="mini-avatar.jpg" alt="Mini Profil" class="mini-avatar">
+                    <span class="discord-username" id="discord-user">tr_aytekin</span>
+                </div>
+                <div class="badges-row">
+                    <span class="badge badge-vip" title="VIP Üye">⚡ VIP</span>
+                    <span class="badge purple-badge" title="Guard Rozet"><i class="fa-solid fa-shield-halved"></i></span>
+                </div>
+            </div>
+
+            <div class="social-links reveal reveal-6">
+                <a href="javascript:void(0)" onclick="copyDiscord('tr_aytekin')" title="Discord">
+                    <i class="fab fa-discord"></i>
+                    <span>Discord</span>
+                </a>
+                <a href="https://steamcommunity.com/profiles/76561199172430315/" target="_blank" title="Steam">
+                    <i class="fab fa-steam"></i>
+                    <span>Steam</span>
+                </a>
+                <a href="https://github.com/ZradoW" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://zradow.github.io/No2/" target="_blank" title="Centre">
+                    <i class="fas fa-home"></i>
+                    <span>Centre</span>
+                </a>
+            </div>
+
+            <p class="tag">MA</p>
+
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Kopyalandı!</span>
+    </div>
+
+    <script>
+        const video = document.getElementById('video-background');
+        const muteToggle = document.getElementById('mute-toggle');
+        const preloader = document.getElementById('preloader');
+        const profileCard = document.getElementById('profile-card');
+        const viewCounter = document.getElementById('view-counter');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        preloader.addEventListener('click', () => {
+            preloader.style.opacity = '0';
+            preloader.style.visibility = 'hidden';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+                animateCounter(469);
+            }, 800);
+        });
+
+        muteToggle.addEventListener('click', () => {
+            video.muted = !video.muted;
+            const icon = muteToggle.querySelector('i');
+            if (video.muted) {
+                icon.className = 'fas fa-volume-off';
+                muteToggle.style.color = 'rgba(255,255,255,0.6)';
+                muteToggle.style.borderColor = 'rgba(255,255,255,0.1)';
+            } else {
+                icon.className = 'fas fa-volume-up';
+                muteToggle.style.color = '#00ff88';
+                muteToggle.style.borderColor = 'rgba(0,255,136,0.3)';
+            }
+        });
+
+        function animateCounter(target, duration = 2500) {
+            const start = performance.now();
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                viewCounter.textContent = Math.floor(target * ease);
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        function copyDiscord(username) {
+            navigator.clipboard.writeText(username).then(() => {
+                showToast(`Discord kopyalandı: ${username}`);
+            }).catch(() => showToast('Kopyalama başarısız!', true));
+        }
+
+        document.getElementById('discord-user').addEventListener('click', () => copyDiscord('tr_aytekin'));
+
+        function showToast(message, isError = false) {
+            toastMessage.textContent = message;
+            const icon = toast.querySelector('i');
+            if (isError) {
+                toast.style.borderColor = 'rgba(255,71,87,0.5)';
+                toast.style.color = '#ff4757';
+                icon.className = 'fas fa-exclamation-circle';
+            } else {
+                toast.style.borderColor = 'rgba(0,240,255,0.3)';
+                toast.style.color = 'var(--neon-cyan)';
+                icon.className = 'fas fa-check-circle';
+            }
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        profileCard.addEventListener('mousemove', (e) => {
+            const rect = profileCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+            profileCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        profileCard.addEventListener('mouseleave', () => {
+            profileCard.style.transform = 'rotateX(0) rotateY(0)';
+        });
+
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.3;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (mouse.x != null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 120) {
+                        const force = (120 - distance) / 120;
+                        this.speedX -= (dx / distance) * force * 0.02;
+                        this.speedY -= (dy / distance) * force * 0.02;
+                    }
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 240, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(window.innerWidth / 15, 80);
+            for (let i = 0; i < count; i++) particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        const opacity = (1 - distance / 100) * 0.08;
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        const socialLinks = document.querySelectorAll('.social-links a');
+        socialLinks.forEach(link => {
+            link.addEventListener('mousemove', (e) => {
+                const rect = link.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                link.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.08)`;
+            });
+            link.addEventListener('mouseleave', () => { link.style.transform = ''; });
+        });
+    </script>
+</body>
+</html>
