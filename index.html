@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝙅𝙍|Fahrenight¹⁹³³☪</title>
+    <title>𝙅𝙍|Fahrenight☪</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="mor_silah.png">
@@ -24,14 +24,25 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            /* Video yüklenene kadar boş hissettirmemesi için şık bir arka plan fallback'i */
-            background: radial-gradient(circle at center, #0c0c14 0%, var(--dark-bg) 100%);
+            background: var(--dark-bg);
             color: #e3e3e3;
             overflow: hidden;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        /* Video Background */
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+            filter: brightness(0.35) contrast(1.1) saturate(1.1);
         }
 
         /* Scanlines */
@@ -50,29 +61,6 @@
             opacity: 0.25;
         }
 
-        /* Video Background */
-        #video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -2;
-            filter: brightness(0.35) contrast(1.1) saturate(1.1);
-        }
-
-        /* Particle Canvas */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
         /* Preloader */
         #preloader {
             position: fixed;
@@ -83,7 +71,6 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.8s ease, visibility 0.8s;
-            cursor: pointer;
         }
 
         .preloader-text {
@@ -94,7 +81,6 @@
             text-transform: uppercase;
             opacity: 0.8;
             animation: preloader-pulse 2s ease infinite;
-            user-select: none;
         }
 
         @keyframes preloader-pulse {
@@ -117,7 +103,6 @@
             cursor: pointer;
             font-size: 1.1em;
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -158,7 +143,7 @@
             position: relative;
             overflow: hidden;
             transform-style: preserve-3d;
-            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.15s ease-out;
         }
 
         /* Shimmer Effect */
@@ -200,14 +185,13 @@
             opacity: 0.6;
         }
 
-        /* Views Badge */
+        /* Views Badge - Sağ Üst */
         .views-badge {
             position: absolute;
             top: 20px;
             right: 20px;
             background: rgba(0,0,0,0.4);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.08);
             padding: 6px 14px;
             border-radius: 50px;
@@ -219,7 +203,6 @@
             color: rgba(255,255,255,0.9);
             z-index: 10;
             transition: all 0.3s ease;
-            user-select: none;
         }
 
         .views-badge:hover {
@@ -268,7 +251,6 @@
             width: 110px;
             height: 110px;
             margin: 0 auto 20px;
-            user-select: none;
         }
 
         .main-avatar {
@@ -306,7 +288,7 @@
         /* Name */
         h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.6em;
+            font-size: 2.4em;
             font-weight: 700;
             margin-bottom: 10px;
             background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 50%, var(--neon-purple) 100%);
@@ -316,7 +298,6 @@
             letter-spacing: 1px;
             position: relative;
             display: inline-block;
-            user-select: none;
         }
 
         /* Location */
@@ -329,7 +310,6 @@
             align-items: center;
             gap: 8px;
             font-weight: 500;
-            user-select: none;
         }
 
         .location .fa-location-dot {
@@ -363,7 +343,6 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
-            user-select: none;
         }
 
         .link-info:hover {
@@ -482,7 +461,6 @@
             justify-content: center;
             gap: 12px;
             margin-bottom: 5px;
-            user-select: none;
         }
 
         .social-links a {
@@ -499,9 +477,9 @@
             color: rgba(255,255,255,0.6);
             text-decoration: none;
             font-size: 1.4em;
-            /* Mouseleave anında JavaScript yaylanmasının yumuşak dönmesi için eklendi */
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s, border-color 0.3s, box-shadow 0.3s;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             overflow: hidden;
+            cursor: pointer;
         }
 
         .social-links a span {
@@ -513,6 +491,7 @@
         }
 
         .social-links a:hover {
+            transform: translateY(-5px) scale(1.08);
             border-color: currentColor;
             background: rgba(255,255,255,0.05);
         }
@@ -546,7 +525,6 @@
             letter-spacing: 8px;
             font-weight: 700;
             text-transform: uppercase;
-            user-select: none;
         }
 
         /* Toast */
@@ -570,8 +548,6 @@
             align-items: center;
             gap: 10px;
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            user-select: none;
         }
 
         .toast.show {
@@ -613,7 +589,7 @@
                 padding: 35px 20px 30px;
             }
             h1 {
-                font-size: 1.3em;
+                font-size: 2em;
             }
             .social-links a {
                 width: 58px;
@@ -622,6 +598,7 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -636,8 +613,6 @@
         Tarayıcınız video etiketini desteklemiyor.
     </video>
 
-    <canvas id="particle-canvas"></canvas>
-
     <button id="mute-toggle" title="Sesi Aç/Kapat">
         <i class="fas fa-volume-off"></i>
     </button>
@@ -645,6 +620,7 @@
     <div class="container">
         <div class="profile-card" id="profile-card">
 
+            <!-- Views Badge - Sağ Üst -->
             <div class="views-badge reveal reveal-1">
                 <div class="live-dot"></div>
                 <i class="fa-regular fa-eye"></i>
@@ -656,7 +632,7 @@
                 <div class="status-dot"></div>
             </div>
 
-            <h1 class="reveal reveal-3">𝙅𝙍|Fahrenight¹⁹³³☪</h1>
+            <h1 class="reveal reveal-3">𝙅𝙍|Fahrenight☪</h1>
 
             <p class="location reveal reveal-4">
                 <i class="fa-solid fa-location-dot"></i>
@@ -676,7 +652,7 @@
             </div>
 
             <div class="social-links reveal reveal-6">
-                <a href="javascript:void(0)" onclick="copyDiscord('tr_aytekin')" title="Discord">
+                <a onclick="copyDiscord('tr_aytekin'); return false;" title="Discord">
                     <i class="fab fa-discord"></i>
                     <span>Discord</span>
                 </a>
@@ -705,6 +681,7 @@
     </div>
 
     <script>
+        // Elements
         const video = document.getElementById('video-background');
         const muteToggle = document.getElementById('mute-toggle');
         const preloader = document.getElementById('preloader');
@@ -713,15 +690,35 @@
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toast-message');
 
+        // View Counter - Her yeni ziyaretçide artar
+        function initViewCounter() {
+            const STORAGE_KEY = 'profile_view_count';
+            const VISITED_KEY = 'has_visited_profile';
+
+            let count = parseInt(localStorage.getItem(STORAGE_KEY)) || 469;
+
+            // Eğer bu tarayıcıdan daha önce girilmediyse sayacı artır
+            if (!localStorage.getItem(VISITED_KEY)) {
+                count++;
+                localStorage.setItem(STORAGE_KEY, count);
+                localStorage.setItem(VISITED_KEY, 'true');
+            }
+
+            return count;
+        }
+
+        // Preloader
         preloader.addEventListener('click', () => {
             preloader.style.opacity = '0';
             preloader.style.visibility = 'hidden';
             setTimeout(() => {
                 preloader.style.display = 'none';
-                animateCounter(469);
+                const totalViews = initViewCounter();
+                animateCounter(totalViews);
             }, 800);
         });
 
+        // Mute Toggle
         muteToggle.addEventListener('click', () => {
             video.muted = !video.muted;
             const icon = muteToggle.querySelector('i');
@@ -736,29 +733,43 @@
             }
         });
 
+        // View Counter Animation
         function animateCounter(target, duration = 2500) {
             const start = performance.now();
+            const from = 0;
+
             function update(now) {
                 const elapsed = now - start;
                 const progress = Math.min(elapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                viewCounter.textContent = Math.floor(target * ease);
-                if (progress < 1) requestAnimationFrame(update);
+                const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+                const current = Math.floor(from + (target - from) * ease);
+                viewCounter.textContent = current;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
             }
             requestAnimationFrame(update);
         }
 
+        // Discord Copy
         function copyDiscord(username) {
             navigator.clipboard.writeText(username).then(() => {
                 showToast(`Discord kopyalandı: ${username}`);
-            }).catch(() => showToast('Kopyalama başarısız!', true));
+            }).catch(() => {
+                showToast('Kopyalama başarısız!', true);
+            });
         }
 
-        document.getElementById('discord-user').addEventListener('click', () => copyDiscord('tr_aytekin'));
+        document.getElementById('discord-user').addEventListener('click', () => {
+            copyDiscord('tr_aytekin');
+        });
 
+        // Toast
         function showToast(message, isError = false) {
             toastMessage.textContent = message;
             const icon = toast.querySelector('i');
+
             if (isError) {
                 toast.style.borderColor = 'rgba(255,71,87,0.5)';
                 toast.style.color = '#ff4757';
@@ -768,11 +779,12 @@
                 toast.style.color = 'var(--neon-cyan)';
                 icon.className = 'fas fa-check-circle';
             }
+
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // 3D Kart Tilt Efekti
+        // 3D Tilt Effect
         profileCard.addEventListener('mousemove', (e) => {
             const rect = profileCard.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -781,6 +793,7 @@
             const centerY = rect.height / 2;
             const rotateX = ((y - centerY) / centerY) * -8;
             const rotateY = ((x - centerX) / centerX) * 8;
+
             profileCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
 
@@ -788,101 +801,18 @@
             profileCard.style.transform = 'rotateX(0) rotateY(0)';
         });
 
-        // Partikül Arka Planı
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null };
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5 + 0.3;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.4 + 0.1;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-                if (mouse.x != null) {
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 120) {
-                        const force = (120 - distance) / 120;
-                        this.speedX -= (dx / distance) * force * 0.02;
-                        this.speedY -= (dy / distance) * force * 0.02;
-                    }
-                }
-            }
-            draw() {
-                ctx.fillStyle = `rgba(0, 240, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const count = Math.min(window.innerWidth / 15, 80);
-            for (let i = 0; i < count; i++) particles.push(new Particle());
-        }
-
-        function connectParticles() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 100) {
-                        const opacity = (1 - distance / 100) * 0.08;
-                        ctx.strokeStyle = `rgba(0, 240, 255, ${opacity})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            connectParticles();
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-        animateParticles();
-
-        // Sosyal Medya Butonları Manyetik Hover Etkisi
+        // Magnetic effect for social buttons
         const socialLinks = document.querySelectorAll('.social-links a');
         socialLinks.forEach(link => {
             link.addEventListener('mousemove', (e) => {
                 const rect = link.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                link.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px) scale(1.08)`;
+                link.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.08)`;
             });
-            link.addEventListener('mouseleave', () => { 
-                link.style.transform = 'translate(0px, 0px) scale(1)'; 
+
+            link.addEventListener('mouseleave', () => {
+                link.style.transform = '';
             });
         });
     </script>
