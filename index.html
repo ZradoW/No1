@@ -24,13 +24,30 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
+            /* Video yüklenene kadar boş hissettirmemesi için şık bir arka plan fallback'i */
+            background: radial-gradient(circle at center, #0c0c14 0%, var(--dark-bg) 100%);
             color: #e3e3e3;
             overflow: hidden;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        /* Scanlines */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.15) 2px,
+                rgba(0,0,0,0.15) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.25;
         }
 
         /* Video Background */
@@ -56,22 +73,6 @@
             pointer-events: none;
         }
 
-        /* Scanlines */
-        .scanlines {
-            position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0,0,0,0.15) 2px,
-                rgba(0,0,0,0.15) 4px
-            );
-            pointer-events: none;
-            z-index: 999;
-            opacity: 0.25;
-        }
-
         /* Preloader */
         #preloader {
             position: fixed;
@@ -82,6 +83,7 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.8s ease, visibility 0.8s;
+            cursor: pointer;
         }
 
         .preloader-text {
@@ -92,6 +94,7 @@
             text-transform: uppercase;
             opacity: 0.8;
             animation: preloader-pulse 2s ease infinite;
+            user-select: none;
         }
 
         @keyframes preloader-pulse {
@@ -114,6 +117,7 @@
             cursor: pointer;
             font-size: 1.1em;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -154,7 +158,7 @@
             position: relative;
             overflow: hidden;
             transform-style: preserve-3d;
-            transition: transform 0.15s ease-out;
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         /* Shimmer Effect */
@@ -203,6 +207,7 @@
             right: 20px;
             background: rgba(0,0,0,0.4);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.08);
             padding: 6px 14px;
             border-radius: 50px;
@@ -214,6 +219,7 @@
             color: rgba(255,255,255,0.9);
             z-index: 10;
             transition: all 0.3s ease;
+            user-select: none;
         }
 
         .views-badge:hover {
@@ -262,6 +268,7 @@
             width: 110px;
             height: 110px;
             margin: 0 auto 20px;
+            user-select: none;
         }
 
         .main-avatar {
@@ -309,6 +316,7 @@
             letter-spacing: 1px;
             position: relative;
             display: inline-block;
+            user-select: none;
         }
 
         /* Location */
@@ -321,6 +329,7 @@
             align-items: center;
             gap: 8px;
             font-weight: 500;
+            user-select: none;
         }
 
         .location .fa-location-dot {
@@ -354,6 +363,7 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            user-select: none;
         }
 
         .link-info:hover {
@@ -472,6 +482,7 @@
             justify-content: center;
             gap: 12px;
             margin-bottom: 5px;
+            user-select: none;
         }
 
         .social-links a {
@@ -488,7 +499,8 @@
             color: rgba(255,255,255,0.6);
             text-decoration: none;
             font-size: 1.4em;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* Mouseleave anında JavaScript yaylanmasının yumuşak dönmesi için eklendi */
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s, border-color 0.3s, box-shadow 0.3s;
             overflow: hidden;
         }
 
@@ -501,7 +513,6 @@
         }
 
         .social-links a:hover {
-            transform: translateY(-5px) scale(1.08);
             border-color: currentColor;
             background: rgba(255,255,255,0.05);
         }
@@ -535,6 +546,7 @@
             letter-spacing: 8px;
             font-weight: 700;
             text-transform: uppercase;
+            user-select: none;
         }
 
         /* Toast */
@@ -558,6 +570,8 @@
             align-items: center;
             gap: 10px;
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            user-select: none;
         }
 
         .toast.show {
@@ -758,6 +772,7 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
+        // 3D Kart Tilt Efekti
         profileCard.addEventListener('mousemove', (e) => {
             const rect = profileCard.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -773,6 +788,7 @@
             profileCard.style.transform = 'rotateX(0) rotateY(0)';
         });
 
+        // Partikül Arka Planı
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -856,15 +872,18 @@
         initParticles();
         animateParticles();
 
+        // Sosyal Medya Butonları Manyetik Hover Etkisi
         const socialLinks = document.querySelectorAll('.social-links a');
         socialLinks.forEach(link => {
             link.addEventListener('mousemove', (e) => {
                 const rect = link.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                link.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.08)`;
+                link.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px) scale(1.08)`;
             });
-            link.addEventListener('mouseleave', () => { link.style.transform = ''; });
+            link.addEventListener('mouseleave', () => { 
+                link.style.transform = 'translate(0px, 0px) scale(1)'; 
+            });
         });
     </script>
 </body>
